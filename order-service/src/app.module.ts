@@ -6,6 +6,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
+import { OrdersController } from './orders/orders.controller';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,7 +21,7 @@ import { join } from 'path';
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().allow(''),
         DB_DATABASE: Joi.string().required(),
-    
+
       }),
     }),
     TypeOrmModule.forRootAsync({
@@ -38,7 +40,7 @@ import { join } from 'path';
       },
     }),
     ProductModule],
-  controllers: [AppController],
+  controllers: [AppController, OrdersController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
