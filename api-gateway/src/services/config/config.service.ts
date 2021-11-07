@@ -13,6 +13,13 @@ export class ConfigService {
             },
             transport: Transport.TCP,
         };
+        this.envConfig.paymentService = {
+            options: {
+                port: 3002,
+                host: "localhost",
+            },
+            transport: Transport.TCP,
+        };
     }
 
     get(key: string): any {
