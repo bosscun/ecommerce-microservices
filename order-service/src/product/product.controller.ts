@@ -17,17 +17,7 @@ export class ProductController {
   findAll() {
     return this.productService.findAll();
   }
-
-  @MessagePattern('findOneProduct')
-  findOne(@Payload() id: number) {
-    return this.productService.findOne(id);
-  }
-
-  @MessagePattern('updateProduct')
-  update(@Payload() updateProductDto: UpdateProductDto) {
-    return this.productService.update(updateProductDto.id, updateProductDto);
-  }
-
+  
   @MessagePattern('removeProduct')
   remove(@Payload() id: number) {
     return this.productService.remove(id);

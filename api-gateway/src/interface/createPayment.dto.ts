@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class CreateProductDto{
+export class CreatePaymentDto {
     @ApiProperty()
     title: string;
     @ApiProperty()
@@ -8,7 +8,6 @@ export class CreateProductDto{
     @ApiProperty()
     price: number;
     @ApiProperty()
-    image: string;
-    @ApiProperty()
     status: boolean;
   }
+  

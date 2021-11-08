@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { OrdersControler } from './orders.controler';
+import { OrdersControler } from './orders.controller';
 import { ConfigService } from './services/config/config.service';
 import { ClientProxyFactory } from '@nestjs/microservices';
 import { PaymentControler } from './payment.controller';
@@ -24,6 +24,14 @@ import { PaymentControler } from './payment.controller';
       useFactory: (configService: ConfigService) => {
         const paymentServiceOptions = configService.get('paymentService');
         return ClientProxyFactory.create(paymentServiceOptions);
+      },
+      inject: [ConfigService],
+    },
+    {
+      provide: 'PRODUCT_SERVICE',
+      useFactory: (configService: ConfigService) => {
+        const productServiceOptions = configService.get('productService');
+        return ClientProxyFactory.create(productServiceOptions);
       },
       inject: [ConfigService],
     },

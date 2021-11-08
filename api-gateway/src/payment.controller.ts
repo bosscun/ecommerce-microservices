@@ -1,6 +1,7 @@
-import { Controller, Inject, Post, Req } from '@nestjs/common';
+import { Body, Controller, Inject, Post, Req } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags } from '@nestjs/swagger';
+import { CreatePaymentDto } from './interface/createPayment.dto';
 
 @Controller('payment')
 @ApiTags('payment')
@@ -9,12 +10,9 @@ export class PaymentControler {
         @Inject('PAYMENT_SERVICE') private readonly paymentServiceClient: ClientProxy
     ) { }
 
-    @Post("")
-    public async createPayment(@Req() req) {
-        const order = {
-            key: "value"
-        }
-        return this.paymentServiceClient.send("create_payment", order)
+    @Post()
+    public async createPayment(@Body() payment : CreatePaymentDto) {
+        return this.paymentServiceClient.send("create_payment", payment)
     }
 
 }

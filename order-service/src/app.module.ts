@@ -7,6 +7,7 @@ import * as Joi from 'joi';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { OrdersController } from './orders/orders.controller';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -28,7 +29,7 @@ import { OrdersController } from './orders/orders.controller';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
         return {
-          type: 'postgres',
+          type: 'mysql',
           host: config.get<string>('DB_HOST'),
           port: config.get<number>('DB_POST'),
           username: config.get<string>('DB_USERNAME'),
@@ -39,8 +40,8 @@ import { OrdersController } from './orders/orders.controller';
         };
       },
     }),
-    ProductModule],
-  controllers: [AppController, OrdersController],
+    ProductModule, OrdersModule],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule { }

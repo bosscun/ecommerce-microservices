@@ -12,3 +12,4 @@ export class CreateProductDto{
     @ApiProperty()
     status: boolean;
   }
+  
