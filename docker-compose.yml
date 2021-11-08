@@ -1,52 +1,56 @@
 version: '3'
 services:
-  magazine-microservice:
-    container_name: magazine-microservice
-    build:
-      context: ./magazines-service/
-    environment:
-      - REDIS_HOST=redis
+  gateway:
+    build: ./gateway
+    restart: always
+    hostname: gateway
+    env_file:
+      - .env
     ports:
-      - '3100:3000'
-    depends_on:
-      - redis
+      - "3000:3000"
     networks:
-      - redis-net
-  book-microservice:
-    container_name: book-microservice
-    build:
-      context: ./books-service/
-    environment:
-      - REDIS_HOST=redis
-    ports:
-      - '3200:3000'
-    depends_on:
-      - redis
+      - backend
+      - frontend
+  order:
+    build: ./order
+    restart: always
+    hostname: order
+    env_file:
+      - .env
     networks:
-      - redis-net
-  redis:
-    image: 'redis:latest'
-    container_name: microservice-redis
+      - backend
+    links:
+      - db
+  payment:
+    build: ./payment
+    restart: always
+    hostname: payment
+    env_file:
+      - .env
+    networks:
+      - backend
+    links:
+      - db
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - 'REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL'
-    labels:
-      kompose.service.type: nodeport
-    command:
-      - redis-server
-      - '--bind'
-      - redis
-      - '--port'
-      - '6379'
+      MYSQL_ROOT_PASSWORD: ${DB_USERNAME}
+      MYSQL_USER : ${DB_USERNAME}
+      MYSQL_PASSWORD : ${DB_PASSWORD}
+      MYSQL_DATABASE : ${DB_USERNAME}
+      ports: 
+        - 3306:3306
     volumes:
-      - 'redis_data:/usr/local/etc/redis/redis.conf'
+      - "./.mysql-data/db:/var/lib/mysql"
     ports:
-      - '6379:6379'
+      - 27017:27017
     networks:
-      - redis-net
+      - backend
 networks:
-  redis-net: null
-volumes:
-  redis_data:
-    driver: local
+  backend:
+    driver: bridge
+  frontend:
+    external:
+      name: app
